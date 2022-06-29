@@ -1,0 +1,370 @@
+#VRML_SIM R2022a utf8
+WorldInfo {
+  contactProperties [
+    ContactProperties {
+      material1 "load"
+      material2 "floor"
+      coulombFriction [
+        0.1
+      ]
+    }
+  ]
+}
+Viewpoint {
+  orientation 0.3794743328678762 -0.3198733899029501 -0.8681475940912786 4.46208072664544
+  position 0.09526349280810777 -0.9249437720759972 1.0580767789089187
+}
+TexturedBackground {
+}
+TexturedBackgroundLight {
+}
+DEF FLOOR Solid {
+  children [
+    DEF LINE_SHAPE Shape {
+      appearance PBRAppearance {
+        baseColorMap ImageTexture {
+          url [
+            "https://raw.githubusercontent.com/cyberbotics/webots/R2022a/projects/default/worlds/textures/texture_grid.png"
+          ]
+        }
+        roughness 0.5
+        metalness 0
+      }
+      geometry IndexedFaceSet {
+        coord Coordinate {
+          point [
+            10 10 0
+            -10 10 0
+            -10 -10 0
+            10 -10 0
+          ]
+        }
+        texCoord TextureCoordinate {
+          point [
+            0 10
+            0 0
+            10 0
+            10 10
+          ]
+        }
+        coordIndex [
+          0, 1, 2, 3, -1
+        ]
+        texCoordIndex [
+          0, 1, 2, 3, -1
+        ]
+      }
+    }
+    Transform {
+      children [
+        Shape {
+          appearance PBRAppearance {
+            baseColor 0.647059 0.164706 0.164706
+            roughness 1
+            metalness 0
+          }
+          geometry Box {
+            size 0.5 0.5 0.001
+          }
+        }
+      ]
+    }
+  ]
+  name "ground"
+  contactMaterial "floor"
+  boundingObject Transform {
+    translation 0 0 -1
+    children [
+      Box {
+        size 20 20 2
+      }
+    ]
+  }
+  locked TRUE
+}
+DEF OBSTACLE Solid {
+  translation 1 0 0.03
+  children [
+    DEF BOX_SHAPE Shape {
+      appearance PBRAppearance {
+        baseColor 1 0.647059 0
+        roughness 1
+        metalness 0
+      }
+      geometry Cylinder {
+        height 0.05
+        radius 0.1
+      }
+    }
+  ]
+  name "obstacle"
+  boundingObject USE BOX_SHAPE
+}
+DEF LOAD Solid {
+  translation 0 0 0.025
+  children [
+    DEF BOX_SHAPE Shape {
+      appearance PBRAppearance {
+        baseColor 0.627451 0.12549 0.941176
+        roughness 1
+        metalness 0
+      }
+      geometry Cylinder {
+        height 0.05
+        radius 0.05
+      }
+    }
+  ]
+  contactMaterial "load"
+  boundingObject USE BOX_SHAPE
+  physics Physics {
+  }
+}
+DEF ROBOT E-puck {
+  translation -0.1 0 0
+  controller "advanced_genetic_algorithm"
+}
+DEF GA Robot {
+  children [
+    Emitter {
+      channel 1
+    }
+    Display {
+      width 200
+      height 100
+    }
+  ]
+  controller "advanced_genetic_algorithm_supervisor"
+  supervisor TRUE
+}
+Robot {
+  translation -0.183848 -0.00904631 0.0299763
+  rotation 0.00046231903309197696 0.99999989313055 -2.587215298913886e-09 6.178164607923796e-05
+  children [
+    HingeJoint {
+      jointParameters HingeJointParameters {
+        position 5.654642563785006e-08
+        anchor 0.035 -0.08 0
+        minStop -0.7
+        maxStop 0.7
+      }
+      device [
+        PositionSensor {
+          name "pos_leg_1"
+        }
+        RotationalMotor {
+          name "leg_1"
+        }
+      ]
+      endPoint Solid {
+        translation 0.035 -0.08000000000000027 9.518089304460002e-09
+        rotation 2.829573650516862e-08 0.9999999999999992 2.8273212818925022e-08 1.570000000000001
+        children [
+          DEF Joint Shape {
+            appearance PBRAppearance {
+            }
+            geometry Box {
+              size 0.02 0.02 0.02
+            }
+          }
+          Solid {
+            translation 0.02 0 0
+            children [
+              DEF Leg Shape {
+                appearance PBRAppearance {
+                }
+                geometry Box {
+                  size 0.02 0.02 0.02
+                }
+              }
+            ]
+            boundingObject USE Leg
+            physics Physics {
+            }
+          }
+        ]
+        name "solid(4)"
+        boundingObject USE Joint
+        physics DEF Physics_Wheel Physics {
+        }
+      }
+    }
+    GPS {
+      children [
+        Solid {
+          translation 0 0 0.02
+          children [
+            Shape {
+              appearance PBRAppearance {
+              }
+              geometry Cylinder {
+                height 0.005
+                radius 0.005
+              }
+            }
+          ]
+        }
+      ]
+    }
+    HingeJoint {
+      jointParameters HingeJointParameters {
+        position 5.654192618825121e-08
+        anchor -0.035 -0.08 0
+        minStop -0.7
+        maxStop 0.7
+      }
+      device [
+        PositionSensor {
+          name "pos_leg_2"
+        }
+        RotationalMotor {
+          name "leg_2"
+        }
+      ]
+      endPoint Solid {
+        translation -0.035 -0.08 0
+        rotation -1.4742394915353447e-09 1 -1.47306598231254e-09 1.57
+        children [
+          DEF Joint Shape {
+            appearance PBRAppearance {
+            }
+            geometry Box {
+              size 0.02 0.02 0.02
+            }
+          }
+          Solid {
+            translation 0.02 0 0
+            children [
+              DEF Leg Shape {
+                appearance PBRAppearance {
+                }
+                geometry Box {
+                  size 0.02 0.02 0.02
+                }
+              }
+            ]
+            boundingObject USE Leg
+            physics Physics {
+            }
+          }
+        ]
+        name "solid(1)"
+        boundingObject USE Joint
+        physics DEF Physics_Wheel Physics {
+        }
+      }
+    }
+    HingeJoint {
+      jointParameters HingeJointParameters {
+        position 5.65417948439446e-08
+        anchor -0.035 0.08 0
+        minStop -0.7
+        maxStop 0.7
+      }
+      device [
+        PositionSensor {
+          name "pos_leg_3"
+        }
+        RotationalMotor {
+          name "leg_3"
+        }
+      ]
+      endPoint Solid {
+        translation -0.035 0.08 0
+        rotation 2.829341926366871e-08 0.9999999999999992 2.8270897421972292e-08 1.570000000000001
+        children [
+          DEF Joint Shape {
+            appearance PBRAppearance {
+            }
+            geometry Box {
+              size 0.02 0.02 0.02
+            }
+          }
+          Solid {
+            translation 0.02 0 0
+            children [
+              DEF Leg Shape {
+                appearance PBRAppearance {
+                }
+                geometry Box {
+                  size 0.02 0.02 0.02
+                }
+              }
+            ]
+            boundingObject USE Leg
+            physics Physics {
+            }
+          }
+        ]
+        name "solid(2)"
+        boundingObject USE Joint
+        physics DEF Physics_Wheel Physics {
+        }
+      }
+    }
+    HingeJoint {
+      jointParameters HingeJointParameters {
+        position 5.654643422634074e-08
+        anchor 0.035 0.08 0
+        minStop -0.7
+        maxStop 0.7
+      }
+      device [
+        PositionSensor {
+          name "pos_leg_4"
+        }
+        RotationalMotor {
+          name "leg_4"
+        }
+      ]
+      endPoint Solid {
+        translation 0.035 0.08 0
+        rotation 2.829574080283456e-08 0.9999999999999992 2.8273217113170362e-08 1.570000000000001
+        children [
+          DEF Joint Shape {
+            appearance PBRAppearance {
+            }
+            geometry Box {
+              size 0.02 0.02 0.02
+            }
+          }
+          Solid {
+            translation 0.02 0 0
+            children [
+              DEF Leg Shape {
+                appearance PBRAppearance {
+                }
+                geometry Box {
+                  size 0.02 0.02 0.02
+                }
+              }
+            ]
+            boundingObject USE Leg
+            physics Physics {
+            }
+          }
+        ]
+        name "solid(3)"
+        boundingObject USE Joint
+        physics DEF Physics_Wheel Physics {
+        }
+      }
+    }
+    DEF Body Shape {
+      appearance PBRAppearance {
+        baseColor 1 1 0.1
+        roughness 1
+        metalness 0
+      }
+      geometry Box {
+        size 0.05 0.2 0.03
+      }
+    }
+  ]
+  name "dog"
+  boundingObject USE Body
+  physics Physics {
+  }
+  controller "advanced_genetic_algorithm_supervisor"
+  supervisor TRUE
+}
