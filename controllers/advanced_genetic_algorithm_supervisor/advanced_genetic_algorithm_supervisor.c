@@ -53,6 +53,12 @@ static WbFieldRef robot_rotation;
 static double robot_trans0[3];  // a translation needs 3 doubles
 static double robot_rot0[4];    // a rotation needs 4 doubles
 
+// for reading or setting the dog's position and orientation
+static WbFieldRef dog_translation;
+static WbFieldRef dog_rotation;
+static double dog_trans0[3];  // a translation needs 3 doubles
+static double dog_rot0[4];    // a rotation needs 4 doubles
+
 // for reading or setting the load's position
 static WbFieldRef load_translation;
 static double load_trans0[3];
@@ -114,6 +120,9 @@ void evaluate_genotype(Genotype genotype) {
   wb_supervisor_field_set_sf_vec3f(robot_translation, robot_trans0);
   wb_supervisor_field_set_sf_rotation(robot_rotation, robot_rot0);
   wb_supervisor_field_set_sf_vec3f(load_translation, load_trans0);
+  
+  wb_supervisor_field_set_sf_vec3f(dog_translation, dog_trans0);
+  wb_supervisor_field_set_sf_rotation(dog_rotation, dog_rot0);
 
   // evaluation genotype during one minute
   run_seconds(60.0);
@@ -125,6 +134,9 @@ void evaluate_genotype(Genotype genotype) {
   printf("fitness: %g\n", fitness);
   WbNodeRef robot = wb_supervisor_node_get_from_def("ROBOT");
   wb_supervisor_node_reset_physics(robot);
+  
+  WbNodeRef dog = wb_supervisor_node_get_from_def("DOG");
+  wb_supervisor_node_reset_physics(dog);
 }
 
 void run_optimization() {
@@ -221,6 +233,14 @@ int main(int argc, const char *argv[]) {
   memcpy(robot_trans0, wb_supervisor_field_get_sf_vec3f(robot_translation), sizeof(robot_trans0));
   memcpy(robot_rot0, wb_supervisor_field_get_sf_rotation(robot_rotation), sizeof(robot_rot0));
 
+  //Our robot
+  // find dog node and store initial position and orientation
+  WbNodeRef dog = wb_supervisor_node_get_from_def("DOG");
+  dog_translation = wb_supervisor_node_get_field(dog, "translation");
+  dog_rotation = wb_supervisor_node_get_field(dog, "rotation");
+  memcpy(dog_trans0, wb_supervisor_field_get_sf_vec3f(dog_translation), sizeof(dog_trans0));
+  memcpy(dog_rot0, wb_supervisor_field_get_sf_rotation(dog_rotation), sizeof(dog_rot0));
+  
   // find load node and store initial position
   WbNodeRef load = wb_supervisor_node_get_from_def("LOAD");
   load_translation = wb_supervisor_node_get_field(load, "translation");

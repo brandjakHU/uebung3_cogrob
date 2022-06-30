@@ -68,31 +68,34 @@ static double clip_value(double value, double min_max) {
 
 void sense_compute_and_actuate() {
   // read sensor values
-  /*
+  
   double sensor_values[NUM_SENSORS];
   int i, j;
   for (i = 0; i < NUM_SENSORS; i++)
     sensor_values[i] = wb_distance_sensor_get_value(sensors[i]);
-*/
+
   // compute actuation using Braitenberg's algorithm:
   // The speed of each wheel is computed by summing the value
   // of each sensor multiplied by the corresponding weight of the matrix.
   // By chance, in this case, this works without any scaling of the sensor values nor of the
   // wheels speed but this type of scaling may be necessary with a different problem
-  /*
-  double wheel_speed[NUM_WHEELS] = {0.0, 0.0};
+  
+  double wheel_speed[NUM_WHEELS] = {0.0, 0.0, 0.0, 0.0};
   for (i = 0; i < NUM_WHEELS; i++) {
     for (j = 0; j < NUM_SENSORS; j++)
       wheel_speed[i] += SPEED_UNIT * matrix[j][i] * sensor_values[j];
-  }*/
+  }
 
   // clip to e-puck max speed values to avoid warning
-  //wheel_speed[0] = clip_value(wheel_speed[0], 6.28);
-  //wheel_speed[1] = clip_value(wheel_speed[1], 6.28);
-
+  for (i = 0; i < NUM_WHEELS; i++) {
+    wheel_speed[i] = clip_value(wheel_speed[i], 6.28);
+    //wheel_speed[1] = clip_value(wheel_speed[1], 6.28);
+  }
   // actuate e-puck wheels
-  //wb_motor_set_velocity(left_motor, wheel_speed[0]);
-  //wb_motor_set_velocity(right_motor, wheel_speed[1]);
+  wb_motor_set_velocity(motors[0], wheel_speed[0]);
+  wb_motor_set_velocity(motors[1], wheel_speed[1]);
+  wb_motor_set_velocity(motors[2], wheel_speed[2]);
+  wb_motor_set_velocity(motors[3], wheel_speed[3]);
 }
 
 int main(int argc, const char *argv[]) {
@@ -100,6 +103,8 @@ int main(int argc, const char *argv[]) {
   
 
   wb_robot_init();  // initialize Webots
+  
+  //printf("Controller of dog is running\n");
 
   // find simulation step in milliseconds (WorldInfo.basicTimeStep)
   int time_step = wb_robot_get_basic_time_step();
@@ -154,6 +159,10 @@ int main(int argc, const char *argv[]) {
     ++step;  
     //check_for_new_genes();
     //sense_compute_and_actuate();
+  }
+  while (wb_robot_step(time_step) != -1) {
+    check_for_new_genes();
+    sense_compute_and_actuate();
   }
 
   wb_robot_cleanup();  // cleanup Webots
