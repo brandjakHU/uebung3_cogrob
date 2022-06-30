@@ -139,7 +139,7 @@ DEF GA Robot {
   controller "advanced_genetic_algorithm_supervisor"
   supervisor TRUE
 }
-Robot {
+DEF DOG Robot {
   translation -0.18384799939944835 -0.009046309987933134 0.029963116980971795
   rotation 0.00046313178180094254 0.9999998927544705 -3.138776743685617e-09 6.1798758910936e-05
   children [
@@ -177,8 +177,8 @@ Robot {
         }
       ]
       endPoint Solid {
-        translation 0.035 -0.08000000000000024 9.51808930446001e-09
-        rotation 2.6824555538971304e-08 0.9999999999999994 2.6803202927334063e-08 1.5700000000000003
+        translation 0.035 -0.08000000000000024 9.518089305673619e-09
+        rotation 2.6824555588055867e-08 0.9999999999999994 2.6803202946968032e-08 1.57
         children [
           DEF Joint Shape {
             appearance PBRAppearance {
@@ -243,7 +243,7 @@ Robot {
       ]
       endPoint Solid {
         translation -0.035 -0.08 0
-        rotation -2.9472133407579028e-09 1 -2.9448673297760763e-09 1.57
+        rotation -2.947213447808747e-09 1 -2.9448673419442253e-09 1.5699999999999985
         children [
           DEF Joint Shape {
             appearance PBRAppearance {
@@ -291,7 +291,7 @@ Robot {
       ]
       endPoint Solid {
         translation -0.035 0.08 0
-        rotation 2.6820384973846834e-08 0.9999999999999994 2.679903568202072e-08 1.5700000000000003
+        rotation 2.6820384777506793e-08 0.9999999999999994 2.6799035740922637e-08 1.5699999999999974
         children [
           DEF Joint Shape {
             appearance PBRAppearance {
@@ -339,7 +339,7 @@ Robot {
       ]
       endPoint Solid {
         translation 0.035 0.08 0
-        rotation 2.6824562536901607e-08 0.9999999999999994 2.6803209919694324e-08 1.5700000000000003
+        rotation 2.682456253690164e-08 0.9999999999999994 2.680320993932831e-08 1.5699999999999994
         children [
           DEF Joint Shape {
             appearance PBRAppearance {
