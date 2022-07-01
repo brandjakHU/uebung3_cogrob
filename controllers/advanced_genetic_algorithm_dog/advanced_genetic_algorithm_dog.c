@@ -20,6 +20,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <webots/distance_sensor.h>
+#include <webots/position_sensor.h>
 #include <webots/motor.h>
 #include <webots/receiver.h>
 #include <webots/robot.h>
@@ -39,6 +40,13 @@ WbDeviceTag motors[NUM_LEGS];     // proximity sensors
 
 WbDeviceTag receiver;                 // for receiving genes from Supervisor
 WbDeviceTag left_motor, right_motor;  // motors
+
+// 
+double alpha[] = {0.0, 1.0, 2.4, 0.0};
+double beta[] = {2.0, 5.05, 3.25, 3.5};
+
+// initial velocities
+double velocity[] = {0.0, 0.0, 0.0, 0.0};
 
 // check if a new set of genes was sent by the Supervisor
 // in this case start using these new genes immediately
@@ -69,38 +77,38 @@ static double clip_value(double value, double min_max) {
 void sense_compute_and_actuate() {
   // read sensor values
   
-  double sensor_values[NUM_SENSORS];
-  int i, j;
-  for (i = 0; i < NUM_SENSORS; i++)
-    sensor_values[i] = wb_distance_sensor_get_value(sensors[i]);
-
-  // compute actuation using Braitenberg's algorithm:
-  // The speed of each wheel is computed by summing the value
-  // of each sensor multiplied by the corresponding weight of the matrix.
-  // By chance, in this case, this works without any scaling of the sensor values nor of the
-  // wheels speed but this type of scaling may be necessary with a different problem
-  
-  double wheel_speed[NUM_WHEELS] = {0.0, 0.0, 0.0, 0.0};
-  for (i = 0; i < NUM_WHEELS; i++) {
-    for (j = 0; j < NUM_SENSORS; j++)
-      wheel_speed[i] += SPEED_UNIT * matrix[j][i] * sensor_values[j];
+  for (int i = 0; i < NUM_SENSORS; i++){
+    double sensor_value = wb_position_sensor_get_value(sensors[i]);
+    
+    if(velocity[i]>=0){
+      if((0.7-sensor_value) < 0.1){
+        double currentVelocity = -1.0;
+        wb_motor_set_velocity(motors[i], currentVelocity);
+        velocity[i] = currentVelocity;
+      }
+      else{
+        double currentVelocity = beta[i]*(0.7 - sensor_value)+alpha[i];
+        wb_motor_set_velocity(motors[i], currentVelocity);
+        velocity[i] = currentVelocity;
+      }
+    }
+    
+    else if(velocity[i]<0){
+      if((sensor_value+0.7)<0.1){
+        double currentVelocity = 1.0;
+        wb_motor_set_velocity(motors[i], currentVelocity);
+        velocity[i] = currentVelocity;
+      }
+      else{
+        double currentVelocity = beta[i]*(-0.7 - sensor_value)-alpha[i];
+        wb_motor_set_velocity(motors[i], currentVelocity);
+        velocity[i] = currentVelocity;
+      }
+    }
   }
-
-  // clip to e-puck max speed values to avoid warning
-  for (i = 0; i < NUM_WHEELS; i++) {
-    wheel_speed[i] = clip_value(wheel_speed[i], 6.28);
-    //wheel_speed[1] = clip_value(wheel_speed[1], 6.28);
-  }
-  // actuate e-puck wheels
-  wb_motor_set_velocity(motors[0], wheel_speed[0]);
-  wb_motor_set_velocity(motors[1], wheel_speed[1]);
-  wb_motor_set_velocity(motors[2], wheel_speed[2]);
-  wb_motor_set_velocity(motors[3], wheel_speed[3]);
 }
 
 int main(int argc, const char *argv[]) {
-  
-  
 
   wb_robot_init();  // initialize Webots
   
@@ -124,17 +132,6 @@ int main(int argc, const char *argv[]) {
   // find and enable receiver
   receiver = wb_robot_get_device("receiver");
   wb_receiver_enable(receiver, time_step);
-
-  // get a handler to the motors and set target position to infinity (speed control)
-  /*
-  left_motor = wb_robot_get_device("left wheel motor");
-  right_motor = wb_robot_get_device("right wheel motor");
-  wb_motor_set_position(left_motor, INFINITY);
-  wb_motor_set_position(right_motor, INFINITY);
-  wb_motor_set_velocity(left_motor, 0.0);
-  wb_motor_set_velocity(right_motor, 0.0);
-  
-  */
   
   for (i = 0; i < NUM_LEGS; i++) {
       wb_motor_set_position(motors[i], INFINITY);
@@ -146,22 +143,9 @@ int main(int argc, const char *argv[]) {
   memset(matrix, 0.0, sizeof(matrix));
 
   // run until simulation is restarted
-  
-  int step = 1;
-  double alpha[] = {1.0, 1.0, 0.0, 0.0};
-  double beta[] = {0.5, 0.25, 0.25, 0.5};
-  
   while (wb_robot_step(time_step) != -1) {
-  
-    for (i = 0; i < NUM_LEGS; i++) {
-      wb_motor_set_velocity(motors[i], sin(alpha[i]+beta[i]*step));
-    }
-    ++step;  
-    //check_for_new_genes();
-    //sense_compute_and_actuate();
-  }
-  while (wb_robot_step(time_step) != -1) {
-    check_for_new_genes();
+
+    //check_for_new_genes();*/
     sense_compute_and_actuate();
   }
 
