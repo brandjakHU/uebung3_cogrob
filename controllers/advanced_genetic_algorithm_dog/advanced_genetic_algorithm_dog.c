@@ -59,6 +59,12 @@ void check_for_new_genes() {
     // we don't use any specific mapping nor left/right symmetry
     // it's the GA's responsability to find a functional mapping
     memcpy(matrix, wb_receiver_get_data(receiver), GENOTYPE_SIZE * sizeof(double));
+    
+    //Not final, currently there are more values in matrix (16) than in alpha and beta
+    for (int i = 0; i < 4; i++){
+      alpha[i] = matrix[i][0];
+      beta[i] = matrix[i][1];
+    }
 
     // prepare for receiving next genes packet
     wb_receiver_next_packet(receiver);
@@ -83,12 +89,12 @@ void sense_compute_and_actuate() {
     if(velocity[i]>=0){
       if((0.7-sensor_value) < 0.1){
         double currentVelocity = -1.0;
-        wb_motor_set_velocity(motors[i], currentVelocity);
+        wb_motor_set_velocity(motors[i], clip_value(currentVelocity, 10.0));
         velocity[i] = currentVelocity;
       }
       else{
         double currentVelocity = beta[i]*(0.7 - sensor_value)+alpha[i];
-        wb_motor_set_velocity(motors[i], currentVelocity);
+        wb_motor_set_velocity(motors[i], clip_value(currentVelocity, 10.0));
         velocity[i] = currentVelocity;
       }
     }
@@ -96,12 +102,12 @@ void sense_compute_and_actuate() {
     else if(velocity[i]<0){
       if((sensor_value+0.7)<0.1){
         double currentVelocity = 1.0;
-        wb_motor_set_velocity(motors[i], currentVelocity);
+        wb_motor_set_velocity(motors[i], clip_value(currentVelocity, 10.0));
         velocity[i] = currentVelocity;
       }
       else{
         double currentVelocity = beta[i]*(-0.7 - sensor_value)-alpha[i];
-        wb_motor_set_velocity(motors[i], currentVelocity);
+        wb_motor_set_velocity(motors[i], clip_value(currentVelocity, 10.0));
         velocity[i] = currentVelocity;
       }
     }
@@ -145,7 +151,7 @@ int main(int argc, const char *argv[]) {
   // run until simulation is restarted
   while (wb_robot_step(time_step) != -1) {
 
-    //check_for_new_genes();*/
+    check_for_new_genes();
     sense_compute_and_actuate();
   }
 

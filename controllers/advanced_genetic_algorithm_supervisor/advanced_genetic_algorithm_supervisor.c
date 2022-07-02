@@ -27,13 +27,17 @@
 #include "genotype.h"
 #include "population.h"
 
-static const int POPULATION_SIZE = 50;
-static const int NUM_GENERATIONS = 25;
+//static const int POPULATION_SIZE = 50;
+//static const int NUM_GENERATIONS = 25;
+static const int POPULATION_SIZE = 10;
+static const int NUM_GENERATIONS = 5;
 static const char *FILE_NAME = "fittest.txt";
 
 // must match the values in the advanced_genetic_algorithm.c code
-static const int NUM_SENSORS = 8;
-static const int NUM_WHEELS = 2;
+//static const int NUM_SENSORS = 8;
+//static const int NUM_WHEELS = 2;
+static const int NUM_SENSORS = 4;
+static const int NUM_WHEELS = 4;
 #define GENOTYPE_SIZE (NUM_SENSORS * NUM_WHEELS)
 
 // index access
@@ -69,7 +73,8 @@ static bool demo = true;
 
 void draw_scaled_line(int generation, double y1, double y2) {
   const double XSCALE = (double)display_width / NUM_GENERATIONS;
-  const double YSCALE = 10.0;
+  //const double YSCALE = 10.0;
+  const double YSCALE = 200.0;
   wb_display_draw_line(display, (generation - 0.5) * XSCALE, display_height - y1 * YSCALE, (generation + 0.5) * XSCALE,
                        display_height - y2 * YSCALE);
 }
@@ -104,10 +109,18 @@ void run_seconds(double seconds) {
 }
 
 // compute fitness as the euclidian distance that the load was pushed
-double measure_fitness() {
+/*double measure_fitness() {
   const double *load_trans = wb_supervisor_field_get_sf_vec3f(load_translation);
   double dx = load_trans[X] - load_trans0[X];
   double dz = load_trans[Z] - load_trans0[Z];
+  return sqrt(dx * dx + dz * dz);
+}*/
+
+// compute fitness as the euclidian distance that the dog moved
+double measure_fitness() {
+  const double *dog_trans = wb_supervisor_field_get_sf_vec3f(dog_translation);
+  double dx = dog_trans[X] - dog_trans0[X];
+  double dz = dog_trans[Z] - dog_trans0[Z];
   return sqrt(dx * dx + dz * dz);
 }
 
