@@ -34,11 +34,8 @@ static const int NUM_GENERATIONS = 5;
 static const char *FILE_NAME = "fittest.txt";
 
 // must match the values in the advanced_genetic_algorithm.c code
-//static const int NUM_SENSORS = 8;
-//static const int NUM_WHEELS = 2;
-static const int NUM_SENSORS = 4;
-static const int NUM_WHEELS = 4;
-#define GENOTYPE_SIZE (NUM_SENSORS * NUM_WHEELS)
+static const int NUM_LEGS = 4;
+#define GENOTYPE_SIZE (2 * NUM_LEGS)
 
 // index access
 enum { X, Y, Z };
@@ -51,24 +48,12 @@ static int display_width, display_height;
 // the GA population
 static Population population;
 
-// for reading or setting the robot's position and orientation
-static WbFieldRef robot_translation;
-static WbFieldRef robot_rotation;
-static double robot_trans0[3];  // a translation needs 3 doubles
-static double robot_rot0[4];    // a rotation needs 4 doubles
-
 // for reading or setting the dog's position and orientation
 static WbFieldRef dog_translation;
 static WbFieldRef dog_rotation;
 static double dog_trans0[3];  // a translation needs 3 doubles
 static double dog_rot0[4];    // a rotation needs 4 doubles
 
-// for reading or setting the load's position
-static WbFieldRef load_translation;
-static double load_trans0[3];
-
-// start with a demo until the user presses the 'O' key
-// (change this if you want)
 static bool demo = true;
 
 void draw_scaled_line(int generation, double y1, double y2) {
@@ -108,31 +93,19 @@ void run_seconds(double seconds) {
   }
 }
 
-// compute fitness as the euclidian distance that the load was pushed
-/*double measure_fitness() {
-  const double *load_trans = wb_supervisor_field_get_sf_vec3f(load_translation);
-  double dx = load_trans[X] - load_trans0[X];
-  double dz = load_trans[Z] - load_trans0[Z];
-  return sqrt(dx * dx + dz * dz);
-}*/
-
 // compute fitness as the euclidian distance that the dog moved
 double measure_fitness() {
   const double *dog_trans = wb_supervisor_field_get_sf_vec3f(dog_translation);
-  double dx = dog_trans[X] - dog_trans0[X];
-  double dz = dog_trans[Z] - dog_trans0[Z];
-  return sqrt(dx * dx + dz * dz);
+  
+  double dy = dog_trans[Y] - dog_trans0[Y];
+  
+  return dy;
 }
 
 // evaluate one genotype at a time
 void evaluate_genotype(Genotype genotype) {
   // send genotype to robot for evaluation
   wb_emitter_send(emitter, genotype_get_genes(genotype), GENOTYPE_SIZE * sizeof(double));
-
-  // reset robot and load position
-  wb_supervisor_field_set_sf_vec3f(robot_translation, robot_trans0);
-  wb_supervisor_field_set_sf_rotation(robot_rotation, robot_rot0);
-  wb_supervisor_field_set_sf_vec3f(load_translation, load_trans0);
   
   wb_supervisor_field_set_sf_vec3f(dog_translation, dog_trans0);
   wb_supervisor_field_set_sf_rotation(dog_rotation, dog_rot0);
@@ -145,8 +118,6 @@ void evaluate_genotype(Genotype genotype) {
   genotype_set_fitness(genotype, fitness);
 
   printf("fitness: %g\n", fitness);
-  WbNodeRef robot = wb_supervisor_node_get_from_def("ROBOT");
-  wb_supervisor_node_reset_physics(robot);
   
   WbNodeRef dog = wb_supervisor_node_get_from_def("DOG");
   wb_supervisor_node_reset_physics(dog);
@@ -239,13 +210,6 @@ int main(int argc, const char *argv[]) {
   // initial population
   population = population_create(POPULATION_SIZE, GENOTYPE_SIZE);
 
-  // find robot node and store initial position and orientation
-  WbNodeRef robot = wb_supervisor_node_get_from_def("ROBOT");
-  robot_translation = wb_supervisor_node_get_field(robot, "translation");
-  robot_rotation = wb_supervisor_node_get_field(robot, "rotation");
-  memcpy(robot_trans0, wb_supervisor_field_get_sf_vec3f(robot_translation), sizeof(robot_trans0));
-  memcpy(robot_rot0, wb_supervisor_field_get_sf_rotation(robot_rotation), sizeof(robot_rot0));
-
   //Our robot
   // find dog node and store initial position and orientation
   WbNodeRef dog = wb_supervisor_node_get_from_def("DOG");
@@ -254,11 +218,6 @@ int main(int argc, const char *argv[]) {
   memcpy(dog_trans0, wb_supervisor_field_get_sf_vec3f(dog_translation), sizeof(dog_trans0));
   memcpy(dog_rot0, wb_supervisor_field_get_sf_rotation(dog_rotation), sizeof(dog_rot0));
   
-  // find load node and store initial position
-  WbNodeRef load = wb_supervisor_node_get_from_def("LOAD");
-  load_translation = wb_supervisor_node_get_field(load, "translation");
-  memcpy(load_trans0, wb_supervisor_field_get_sf_vec3f(load_translation), sizeof(load_trans0));
-
   if (demo)
     run_demo();
 

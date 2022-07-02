@@ -28,7 +28,7 @@
 #define NUM_WHEELS 4
 #define NUM_LEGS 4
 #define NUM_SENSORS 4
-#define GENOTYPE_SIZE (NUM_SENSORS * NUM_WHEELS)
+#define GENOTYPE_SIZE (2 * NUM_WHEELS)
 #define SPEED_UNIT 0.00628
 
 // sensor to wheels multiplication matrix
@@ -62,8 +62,8 @@ void check_for_new_genes() {
     
     //Not final, currently there are more values in matrix (16) than in alpha and beta
     for (int i = 0; i < 4; i++){
-      alpha[i] = matrix[i][0];
-      beta[i] = matrix[i][1];
+      alpha[i] = matrix[0][i];
+      beta[i] = matrix[1][i];
     }
 
     // prepare for receiving next genes packet

@@ -5,7 +5,7 @@ sceneTreePerspectives: 000000ff0000000100000002000000c00000011201000000020100000
 maximizedDockId: -1
 centralWidgetVisible: 1
 orthographicViewHeight: 1
-textFiles: 2 "controllers/advanced_genetic_algorithm_supervisor/advanced_genetic_algorithm_supervisor.c" "controllers/advanced_genetic_algorithm/advanced_genetic_algorithm.c" "controllers/advanced_genetic_algorithm_dog/advanced_genetic_algorithm_dog.c"
+textFiles: 0 "controllers/advanced_genetic_algorithm_supervisor/advanced_genetic_algorithm_supervisor.c" "controllers/advanced_genetic_algorithm/advanced_genetic_algorithm.c" "controllers/advanced_genetic_algorithm_dog/advanced_genetic_algorithm_dog.c"
+globalOptionalRendering: CoordinateSystem
 consoles: Console:All:All
-renderingDevicePerspectives: e-puck:camera;0;1;0;0
 renderingDevicePerspectives: robot:display;1;1.73;0;0
