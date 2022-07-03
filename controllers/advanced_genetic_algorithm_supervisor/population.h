@@ -36,6 +36,12 @@ double population_compute_average_fitness(Population p);
 // get the fittest genotype of population p
 Genotype population_get_fittest(Population p);
 
+// get the worst genotype of population p
+Genotype population_get_worst(Population p);
+
+// get the average genotype of population p
+Genotype population_get_average(Population p);
+
 // get a genotype by its index
 Genotype population_get_genotype(Population p, int index);
 

@@ -11,8 +11,8 @@ WorldInfo {
   ]
 }
 Viewpoint {
-  orientation -0.062204554632256014 0.9979080061939635 0.01761262493189321 0.36729250802001556
-  position -0.6954345374214711 0.050396035852763685 0.39785747986882053
+  orientation 0.03609547415588842 -0.995153665214478 0.09146747703775587 5.884304365754602
+  position -0.8304682345412 0.004817308172057374 0.32650879448154496
 }
 TexturedBackground {
 }
@@ -96,7 +96,7 @@ DEF GA Robot {
   supervisor TRUE
 }
 DEF DOG Robot {
-  translation -0.18384799939944835 -0.009046309987933134 0.029963116980971795
+  translation -0.183843 -0.00904631 0.0799631
   rotation 0.00046313178180094254 0.9999998927544705 -3.138776743685617e-09 6.1798758910936e-05
   children [
     Receiver {
@@ -134,8 +134,8 @@ DEF DOG Robot {
         }
       ]
       endPoint Solid {
-        translation 0.035 -0.08000000000000024 9.518089313225002e-09
-        rotation 2.682455467507634e-08 0.9999999999999994 2.680320286843214e-08 1.5699999999999887
+        translation 0.035 -0.08000000000000024 9.518089315913942e-09
+        rotation 2.682455463580859e-08 0.9999999999999994 2.6803202868432133e-08 1.5699999999999814
         children [
           DEF Joint Shape {
             appearance PBRAppearance {
@@ -147,10 +147,40 @@ DEF DOG Robot {
           Solid {
             translation 0.02 0 0
             children [
+              Solid {
+                translation 0.02 0 0
+                children [
+                  Solid {
+                    translation 0.02 0 0
+                    children [
+                      DEF Leg Shape {
+                        appearance PBRAppearance {
+                          roughness 1
+                          metalness 0
+                        }
+                        geometry Box {
+                          size 0.02 0.02 0.02
+                        }
+                      }
+                    ]
+                    boundingObject USE Leg
+                    physics Physics {
+                    }
+                  }
+                  DEF Leg Shape {
+                    appearance PBRAppearance {
+                    }
+                    geometry Box {
+                      size 0.02 0.02 0.02
+                    }
+                  }
+                ]
+                boundingObject USE Leg
+                physics Physics {
+                }
+              }
               DEF Leg Shape {
                 appearance PBRAppearance {
-                  roughness 1
-                  metalness 0
                 }
                 geometry Box {
                   size 0.02 0.02 0.02
@@ -185,7 +215,7 @@ DEF DOG Robot {
       ]
       endPoint Solid {
         translation -0.035 -0.08 0
-        rotation -2.9472123483060037e-09 1 -2.9448674401143066e-09 1.569999999999985
+        rotation -2.9472124464758067e-09 1 -2.9448675284672674e-09 1.5699999999999792
         children [
           DEF Joint Shape {
             appearance PBRAppearance {
@@ -197,10 +227,40 @@ DEF DOG Robot {
           Solid {
             translation 0.02 0 0
             children [
+              Solid {
+                translation 0.02 0 0
+                children [
+                  Solid {
+                    translation 0.02 0 0
+                    children [
+                      DEF Leg Shape {
+                        appearance PBRAppearance {
+                          roughness 1
+                          metalness 0
+                        }
+                        geometry Box {
+                          size 0.02 0.02 0.02
+                        }
+                      }
+                    ]
+                    boundingObject USE Leg
+                    physics Physics {
+                    }
+                  }
+                  DEF Leg Shape {
+                    appearance PBRAppearance {
+                    }
+                    geometry Box {
+                      size 0.02 0.02 0.02
+                    }
+                  }
+                ]
+                boundingObject USE Leg
+                physics Physics {
+                }
+              }
               DEF Leg Shape {
                 appearance PBRAppearance {
-                  roughness 1
-                  metalness 0
                 }
                 geometry Box {
                   size 0.02 0.02 0.02
@@ -235,7 +295,7 @@ DEF DOG Robot {
       ]
       endPoint Solid {
         translation -0.035 0.08 0
-        rotation 2.6820385405794362e-08 0.9999999999999994 2.679903562311879e-08 1.5699999999999836
+        rotation 2.6820385445062383e-08 0.9999999999999994 2.6799035721288658e-08 1.5699999999999807
         children [
           DEF Joint Shape {
             appearance PBRAppearance {
@@ -247,10 +307,40 @@ DEF DOG Robot {
           Solid {
             translation 0.02 0 0
             children [
+              Solid {
+                translation 0.02 0 0
+                children [
+                  Solid {
+                    translation 0.02 0 0
+                    children [
+                      DEF Leg Shape {
+                        appearance PBRAppearance {
+                          roughness 1
+                          metalness 0
+                        }
+                        geometry Box {
+                          size 0.02 0.02 0.02
+                        }
+                      }
+                    ]
+                    boundingObject USE Leg
+                    physics Physics {
+                    }
+                  }
+                  DEF Leg Shape {
+                    appearance PBRAppearance {
+                    }
+                    geometry Box {
+                      size 0.02 0.02 0.02
+                    }
+                  }
+                ]
+                boundingObject USE Leg
+                physics Physics {
+                }
+              }
               DEF Leg Shape {
                 appearance PBRAppearance {
-                  roughness 1
-                  metalness 0
                 }
                 geometry Box {
                   size 0.02 0.02 0.02
@@ -285,7 +375,7 @@ DEF DOG Robot {
       ]
       endPoint Solid {
         translation 0.035 0.08 0
-        rotation 2.6824561888980735e-08 0.9999999999999994 2.6803209900060365e-08 1.5699999999999896
+        rotation 2.6824561712275084e-08 0.9999999999999994 2.6803209723354585e-08 1.569999999999985
         children [
           DEF Joint Shape {
             appearance PBRAppearance {
@@ -297,10 +387,40 @@ DEF DOG Robot {
           Solid {
             translation 0.02 0 0
             children [
+              Solid {
+                translation 0.02 0 0
+                children [
+                  Solid {
+                    translation 0.02 0 0
+                    children [
+                      DEF Leg Shape {
+                        appearance PBRAppearance {
+                          roughness 1
+                          metalness 0
+                        }
+                        geometry Box {
+                          size 0.02 0.02 0.02
+                        }
+                      }
+                    ]
+                    boundingObject USE Leg
+                    physics Physics {
+                    }
+                  }
+                  DEF Leg Shape {
+                    appearance PBRAppearance {
+                    }
+                    geometry Box {
+                      size 0.02 0.02 0.02
+                    }
+                  }
+                ]
+                boundingObject USE Leg
+                physics Physics {
+                }
+              }
               DEF Leg Shape {
                 appearance PBRAppearance {
-                  roughness 1
-                  metalness 0
                 }
                 geometry Box {
                   size 0.02 0.02 0.02

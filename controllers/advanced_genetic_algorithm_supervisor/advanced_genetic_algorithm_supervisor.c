@@ -11,13 +11,14 @@
 #include "genotype.h"
 #include "population.h"
 
-static const int POPULATION_SIZE = 50;
-static const int NUM_GENERATIONS = 25;
-//static const int POPULATION_SIZE = 10;
-//static const int NUM_GENERATIONS = 5;
+//static const int POPULATION_SIZE = 50;
+//static const int NUM_GENERATIONS = 25;
+static const int POPULATION_SIZE = 10;
+static const int NUM_GENERATIONS = 5;
 static const char *FILE_NAME = "fittest.txt";
 static const char *FILE_NAME2 = "worst.txt";
 static const char *FILE_NAME3 = "average.txt";
+static const char *FITNESS_LOG = "fitness_logs.csv";
 
 // must match the values in the advanced_genetic_algorithm.c code
 static const int NUM_LEGS = 4;
@@ -39,6 +40,8 @@ static WbFieldRef dog_translation;
 static WbFieldRef dog_rotation;
 static double dog_trans0[3];  // a translation needs 3 doubles
 static double dog_rot0[4];    // a rotation needs 4 doubles
+
+static FILE *log_fitness;
 
 static bool demo = true;
 
@@ -128,12 +131,15 @@ void run_optimization() {
     }
 
     double best_fitness = genotype_get_fitness(population_get_fittest(population));
-    double average_fitness = population_compute_average_fitness(population);
+    double average_fitness = genotype_get_fitness(population_get_average(population));
+    double worst_fitness = genotype_get_fitness(population_get_worst(population));
 
     // display results
     plot_fitness(i, best_fitness, average_fitness);
     printf("best fitness: %g\n", best_fitness);
     printf("average fitness: %g\n", average_fitness);
+    
+    fprintf(log_fitness,"%.5f, %.5f, %.5f\n", best_fitness, average_fitness, worst_fitness);
 
     // reproduce (but not after the last generation)
     if (i < NUM_GENERATIONS - 1)
@@ -153,7 +159,7 @@ void run_optimization() {
     printf("unable to write %s\n", FILE_NAME);
     
   // save worst individual
-  Genotype worst = population_get_fittest(population);
+  Genotype worst = population_get_worst(population);
   FILE *outfile2 = fopen(FILE_NAME2, "w");
   if (outfile2) {
     genotype_fwrite(worst, outfile2);
@@ -163,12 +169,12 @@ void run_optimization() {
     printf("unable to write %s\n", FILE_NAME2);
     
   // save average individual
-  Genotype average = population_get_fittest(population);
+  Genotype average = population_get_average(population);
   FILE *outfile3 = fopen(FILE_NAME3, "w");
   if (outfile3) {
     genotype_fwrite(average, outfile3);
     fclose(outfile3);
-    printf("wrote best genotype into %s\n", FILE_NAME3);
+    printf("wrote median genotype into %s\n", FILE_NAME3);
   } else
     printf("unable to write %s\n", FILE_NAME3);    
 
@@ -254,12 +260,16 @@ int main(int argc, const char *argv[]) {
   memcpy(dog_trans0, wb_supervisor_field_get_sf_vec3f(dog_translation), sizeof(dog_trans0));
   memcpy(dog_rot0, wb_supervisor_field_get_sf_rotation(dog_rotation), sizeof(dog_rot0));
   
+  log_fitness = fopen(FITNESS_LOG, "w");
+  fprintf(log_fitness,"best, average, worst\n");
+  
   if (demo)
     run_demo();
 
   // run GA optimization
   run_optimization();
 
+  fclose(log_fitness);
   // cleanup Webots
   wb_robot_cleanup();
   return 0;  // ignored
