@@ -111,6 +111,40 @@ Genotype population_get_fittest(Population p) {
   return fittest;
 }
 
+Genotype population_get_worst(Population p) {
+  Genotype worst = p->genotypes[0];
+  int i;
+  for (i = 1; i < p->size; i++) {
+    Genotype candidate = p->genotypes[i];
+    if (genotype_get_fitness(candidate) < genotype_get_fitness(worst))
+      worst = candidate;
+  }
+
+  return worst;
+}
+
+Genotype population_get_average(Population p) {
+  Population q = p; //Copy to avoid problems
+  Genotype average = q->genotypes[0];
+  int i;
+  int j;
+  Genotype temp;
+  for (i = 0; i < q->size; i++) {
+    for (j = 0; j < (q->size)-1; j++) {
+      Genotype candidate = q->genotypes[j];
+      Genotype candidate2 = q->genotypes[j+1];
+      if (genotype_get_fitness(candidate) > genotype_get_fitness(candidate2)) {
+        temp = candidate;
+        candidate = candidate2;
+        candidate2 = temp;
+      }
+    }
+  }
+  average = q->genotypes[(q->size)/2];
+
+  return average;
+}
+
 Genotype population_get_genotype(Population p, int index) {
   return p->genotypes[index];
 }

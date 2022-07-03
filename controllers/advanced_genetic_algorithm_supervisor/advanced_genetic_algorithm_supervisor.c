@@ -1,19 +1,3 @@
-/*
- * Copyright 1996-2021 Cyberbotics Ltd.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 //   Description:   Supervisor code for genetic algorithm
 
 #include <math.h>
@@ -27,11 +11,13 @@
 #include "genotype.h"
 #include "population.h"
 
-//static const int POPULATION_SIZE = 50;
-//static const int NUM_GENERATIONS = 25;
-static const int POPULATION_SIZE = 10;
-static const int NUM_GENERATIONS = 5;
+static const int POPULATION_SIZE = 50;
+static const int NUM_GENERATIONS = 25;
+//static const int POPULATION_SIZE = 10;
+//static const int NUM_GENERATIONS = 5;
 static const char *FILE_NAME = "fittest.txt";
+static const char *FILE_NAME2 = "worst.txt";
+static const char *FILE_NAME3 = "average.txt";
 
 // must match the values in the advanced_genetic_algorithm.c code
 static const int NUM_LEGS = 4;
@@ -98,6 +84,7 @@ double measure_fitness() {
   const double *dog_trans = wb_supervisor_field_get_sf_vec3f(dog_translation);
   
   double dy = dog_trans[Y] - dog_trans0[Y];
+  //double dy = dog_trans[Z] - dog_trans0[Z]; //Alternative fitness function
   
   return dy;
 }
@@ -164,6 +151,26 @@ void run_optimization() {
     printf("wrote best genotype into %s\n", FILE_NAME);
   } else
     printf("unable to write %s\n", FILE_NAME);
+    
+  // save worst individual
+  Genotype worst = population_get_fittest(population);
+  FILE *outfile2 = fopen(FILE_NAME2, "w");
+  if (outfile2) {
+    genotype_fwrite(worst, outfile2);
+    fclose(outfile2);
+    printf("wrote worst genotype into %s\n", FILE_NAME2);
+  } else
+    printf("unable to write %s\n", FILE_NAME2);
+    
+  // save average individual
+  Genotype average = population_get_fittest(population);
+  FILE *outfile3 = fopen(FILE_NAME3, "w");
+  if (outfile3) {
+    genotype_fwrite(average, outfile3);
+    fclose(outfile3);
+    printf("wrote best genotype into %s\n", FILE_NAME3);
+  } else
+    printf("unable to write %s\n", FILE_NAME3);    
 
   population_destroy(population);
 }
@@ -182,6 +189,35 @@ void run_demo() {
     printf("unable to read %s\n", FILE_NAME);
     return;
   }
+  
+  // show demo of the worst individual
+/*void run_demo() {
+  wb_keyboard_enable(time_step);
+
+  printf("---\n");
+  printf("running demo of worst individual ...\n");
+  printf("select the 3D window and push the 'O' key\n");
+  printf("to start genetic algorithm optimization\n");
+
+  FILE *infile = fopen(FILE_NAME2, "r");
+  if (!infile) {
+    printf("unable to read %s\n", FILE_NAME2);
+    return;
+  }*/
+  
+/*void run_demo() {
+  wb_keyboard_enable(time_step);
+
+  printf("---\n");
+  printf("running demo of median individual ...\n");
+  printf("select the 3D window and push the 'O' key\n");
+  printf("to start genetic algorithm optimization\n");
+
+  FILE *infile = fopen(FILE_NAME3, "r");
+  if (!infile) {
+    printf("unable to read %s\n", FILE_NAME3);
+    return;
+  }*/
 
   Genotype genotype = genotype_create();
   genotype_fread(genotype, infile);

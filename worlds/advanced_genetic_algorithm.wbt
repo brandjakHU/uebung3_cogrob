@@ -11,8 +11,8 @@ WorldInfo {
   ]
 }
 Viewpoint {
-  orientation 0.08913647284764363 -0.9799488345252401 -0.17819924500655174 5.7588020935515605
-  position -0.9434169449142553 0.08166135649055371 0.5354580140857467
+  orientation -0.05567756974664037 0.9984050865066715 -0.00934299013775398 0.3772345994309438
+  position -3.027150317096343 -0.05357308682487516 1.58831222397638
 }
 TexturedBackground {
 }
@@ -134,8 +134,8 @@ DEF DOG Robot {
         }
       ]
       endPoint Solid {
-        translation 0.035 -0.08000000000000024 9.518089313224998e-09
-        rotation 2.682455467507634e-08 0.9999999999999994 2.6803202868432136e-08 1.5699999999999887
+        translation 0.035 -0.08000000000000024 9.518089313225e-09
+        rotation 2.682455467507634e-08 0.9999999999999994 2.680320286843214e-08 1.5699999999999887
         children [
           DEF Joint Shape {
             appearance PBRAppearance {
@@ -200,7 +200,7 @@ DEF DOG Robot {
       ]
       endPoint Solid {
         translation -0.035 -0.08 0
-        rotation -2.947212348305999e-09 1 -2.9448674401142925e-09 1.5699999999999852
+        rotation -2.947212348305999e-09 1 -2.9448674401142975e-09 1.5699999999999852
         children [
           DEF Joint Shape {
             appearance PBRAppearance {
@@ -248,7 +248,7 @@ DEF DOG Robot {
       ]
       endPoint Solid {
         translation -0.035 0.08 0
-        rotation 2.682038540579435e-08 0.9999999999999994 2.6799035623118787e-08 1.569999999999984
+        rotation 2.682038540579435e-08 0.9999999999999994 2.679903562311879e-08 1.5699999999999839
         children [
           DEF Joint Shape {
             appearance PBRAppearance {
@@ -296,7 +296,7 @@ DEF DOG Robot {
       ]
       endPoint Solid {
         translation 0.035 0.08 0
-        rotation 2.6824561888980718e-08 0.9999999999999994 2.6803209900060362e-08 1.5699999999999903
+        rotation 2.6824561888980725e-08 0.9999999999999994 2.6803209900060365e-08 1.5699999999999898
         children [
           DEF Joint Shape {
             appearance PBRAppearance {
