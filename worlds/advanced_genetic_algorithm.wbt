@@ -12,7 +12,7 @@ WorldInfo {
 }
 Viewpoint {
   orientation -0.062204554632256014 0.9979080061939635 0.01761262493189321 0.36729250802001556
-  position -0.6954345374214711 0.050396035852763685 0.39785747986882053
+  position -1.3136906770651193 0.04894944638782079 0.6352176691239265
 }
 TexturedBackground {
 }
@@ -134,7 +134,7 @@ DEF DOG Robot {
         }
       ]
       endPoint Solid {
-        translation 0.035 -0.08000000000000024 9.518089313225002e-09
+        translation 0.035 -0.08000000000000024 9.518089313225003e-09
         rotation 2.682455467507634e-08 0.9999999999999994 2.680320286843214e-08 1.5699999999999887
         children [
           DEF Joint Shape {
@@ -185,7 +185,7 @@ DEF DOG Robot {
       ]
       endPoint Solid {
         translation -0.035 -0.08 0
-        rotation -2.9472123483060037e-09 1 -2.9448674401143066e-09 1.569999999999985
+        rotation -2.9472123483060087e-09 1 -2.9448674401143116e-09 1.569999999999985
         children [
           DEF Joint Shape {
             appearance PBRAppearance {
@@ -285,7 +285,7 @@ DEF DOG Robot {
       ]
       endPoint Solid {
         translation 0.035 0.08 0
-        rotation 2.6824561888980735e-08 0.9999999999999994 2.6803209900060365e-08 1.5699999999999896
+        rotation 2.6824561888980738e-08 0.9999999999999994 2.6803209900060365e-08 1.5699999999999894
         children [
           DEF Joint Shape {
             appearance PBRAppearance {
